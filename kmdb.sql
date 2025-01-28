@@ -113,12 +113,110 @@
 -- Drop existing tables, so you'll start fresh each time this script is run.
 -- TODO!
 
+DROP TABLE IF EXISTS Studio;
+DROP TABLE IF EXISTS Movie;
+DROP TABLE IF EXISTS Actor;
+DROP TABLE IF EXISTS Credit;
+
 -- Create new tables, according to your domain model
 -- TODO!
+
+-- Table for Studio
+
+CREATE TABLE Studio(
+Studio_ID INTEGER PRIMARY KEY,
+Studio_Name Text
+);
+
+-- Table for Movie
+
+CREATE TABLE Movie(
+Movie_ID INTEGER PRIMARY KEY,
+Movie_Title TEXT,
+Year_Released INTEGER,
+MPAA_Rating TEXT,
+Studio_ID INTEGER
+);
+
+-- Table for Actor
+
+CREATE TABLE Actor(
+Actor_ID INTEGER PRIMARY KEY,
+Actor_Name Text
+);
+
+-- Table for Credit
+
+CREATE TABLE Credit(
+Credit_ID INTEGER PRIMARY KEY,
+Movie_ID INTEGER,
+Actor_ID INTEGER,
+Character_Name TEXT
+);
+
 
 -- Insert data into your database that reflects the sample data shown above
 -- Use hard-coded foreign key IDs when necessary
 -- TODO!
+
+
+-- Database Entry for Studio Table
+
+INSERT INTO Studio
+(Studio_ID, Studio_Name) 
+VALUES 
+(1, 'Warner Bros.');
+
+
+-- Database Entry for Movie Table
+
+INSERT INTO Movie
+(Movie_ID, Movie_Title, Year_Released, MPAA_Rating, Studio_ID)
+VALUES 
+(1, 'Batman Begins', 2005, 'PG-13', 1),
+(2, 'The Dark Knight', 2008, 'PG-13', 1), 
+(3, 'The Dark Knight Rises', 2012, 'PG-13', 1);
+
+
+-- Database Entry for Actor Table 
+
+INSERT INTO Actor
+(Actor_ID, Actor_Name)
+VALUES
+(1, 'Christian Bale'),
+(2, 'Michael Caine'),
+(3, 'Liam Neeson'),
+(4, 'Katie Holmes'),
+(5, 'Gary Oldman'),
+(6, 'Heath Ledger'),
+(7, 'Aaron Eckhart'),
+(8, 'Maggie Gyllenhaal'),
+(9, 'Tom Hardy'),
+(10, 'Joseph Gordon-Levitt'),
+(11, 'Anne Hathaway');
+
+
+-- Database Entry for Credit Table 
+
+INSERT INTO Credit
+(Credit_ID, Movie_ID, Actor_ID, Character_Name)
+VALUES 
+(1,1,1,'Bruce Wayne'),
+(2,1,2,'Alfred'),
+(3,1,3,'Ra`s Al Ghul'),
+(4,1,4,'Rachel Dawes'),
+(5,1,5,'Commissioner Gordon'),
+(6,2,1,'Bruce Wayne'),
+(7,2,6,'Joker'),
+(8,2,7,'Harvey Dent'),
+(9,2,2,'Alfred'),
+(10,2,8,'Rachel Dawes'),
+(11,3,1,'Bruce Wayne'),
+(12,3,5,'Commissioner Gordon'),
+(13,3,9,'Bane'),
+(14,3,10,'John Blake'),
+(15,3,11,'Selina Kyle');
+
 
 -- Prints a header for the movies output
 .print "Movies"
@@ -127,6 +225,19 @@
 
 -- The SQL statement for the movies output
 -- TODO!
+
+
+SELECT 
+Movie.Movie_Title,
+Movie.Year_Released,
+Movie.MPAA_Rating,
+Studio.Studio_Name
+FROM Movie
+INNER JOIN Studio
+ON Movie.Studio_ID = Studio.Studio_ID
+ORDER BY Movie.Movie_Title
+;
+
 
 -- Prints a header for the cast output
 .print ""
@@ -137,3 +248,15 @@
 
 -- The SQL statement for the cast output
 -- TODO!
+
+
+SELECT 
+Movie.Movie_Title,
+Actor.Actor_Name,
+Credit.Character_Name
+FROM Movie, Actor, Credit
+WHERE Credit.Movie_ID = Movie.Movie_ID
+AND Credit.Actor_ID = Actor.Actor_ID
+ORDER BY Movie.Movie_Title, Credit.Credit_ID
+;
+
